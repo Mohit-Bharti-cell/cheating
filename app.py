@@ -4,8 +4,12 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 import logging
+import eventlet
 
 from events import register_socket_events
+
+# Monkey patch for eventlet to work with Flask-SocketIO
+eventlet.monkey_patch()
 
 load_dotenv()
 
@@ -17,7 +21,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "defaultsecret")
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 register_socket_events(socketio)
 
 @app.route("/")

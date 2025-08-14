@@ -3,3 +3,4 @@ Flask-SocketIO
 flask-cors
 python-dotenv
 eventlet
+httpx
